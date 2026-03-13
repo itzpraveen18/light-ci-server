@@ -47,3 +47,8 @@ Thumbs.db
 # Keep *.env.example committed; ignore all *.env files with real values
 .claude/env/*.env
 !.claude/env/*.env.example
+
+# ── Claude central config (contains real values) ─────────────────────────────
+.claude/config.yml
+# Keep the example committed
+!.claude/config.yml.example

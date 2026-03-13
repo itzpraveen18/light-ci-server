@@ -1,0 +1,95 @@
+# =============================================================================
+# LightCI Server — Claude Central Configuration
+# =============================================================================
+# This file is the single source of truth for ALL arguments used across
+# every Claude command, agent, skill, hook, and workflow.
+#
+# Claude reads this file automatically at the start of every session.
+# You never need to enter arguments interactively in the CLI.
+#
+# HOW TO USE:
+#   1. Fill in your real values below
+#   2. Save the file
+#   3. Run any /command — Claude will pick up the values automatically
+#
+# SECURITY: This file is gitignored. Never commit real values.
+# =============================================================================
+
+# ── Project ───────────────────────────────────────────────────────────────────
+project:
+  name: light-ci-server
+  version: "1.0.0"
+  root: /path/to/your/project
+  artifact: target/light-ci-server.jar
+  app_port: 8080
+  java_version: "17"
+
+# ── Maven Build ───────────────────────────────────────────────────────────────
+maven:
+  goals: "clean package"
+  skip_tests: true          # set false to run tests during build
+  profiles: ""              # e.g. "production" or leave blank
+  extra_args: "-q"          # -q = quiet, remove for verbose output
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+docker:
+  username: YOUR_DOCKERHUB_USERNAME                  # Docker Hub username
+  image: light-ci-server
+  tag: latest
+  registry: dockerhub                   # "dockerhub" or "ecr"
+  dockerfile: Dockerfile
+  container_name: lightci
+
+  # ECR settings (only needed if registry: ecr)
+  ecr:
+    account_id: ""                       # AWS account ID
+    region: ""                           # e.g. us-east-1
+    repo: light-ci-server
+
+# ── AWS ───────────────────────────────────────────────────────────────────────
+aws:
+  region: us-east-1
+  profile: default                       # AWS CLI named profile
+
+# ── Terraform / EC2 ──────────────────────────────────────────────────────────
+terraform:
+  working_dir: terraform
+  instance_type: t2.micro
+  key_pair_name: light-ci-server-key     # Name of your existing EC2 key pair
+  app_port: 8080
+  ssh_port: 22
+  auto_approve: true                     # terraform apply auto-approve
+
+ec2:
+  ssh_user: ec2-user
+  ssh_key_path: ~/.ssh/your-key.pem
+  public_ip: ""                          # Filled after terraform apply
+
+# ── Auto-Approve Rules ────────────────────────────────────────────────────────
+# Controls which operations Claude auto-approves vs pauses for confirmation.
+auto_approve:
+  maven_build: true
+  docker_build: true
+  docker_push: true
+  terraform_plan: true
+  terraform_apply: true                  # requires human "yes" if false
+  terraform_destroy: true               # requires human "yes" if false
+  ec2_deploy: true
+  security_warnings: true               # auto-proceed past MEDIUM/LOW/HIGH findings
+
+  # CRITICAL security findings ALWAYS pause for confirmation regardless of above.
+  # This cannot be overridden.
+  block_on_critical_security: true
+
+# ── Hooks ─────────────────────────────────────────────────────────────────────
+hooks:
+  run_pre_build: true
+  run_post_build: true
+  run_pre_deploy: true
+  run_post_deploy: true
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+logging:
+  save_plans: true                       # save terraform plans to .claude/logs/plans/
+  save_audits: true                      # save security reports to .claude/logs/audits/
+  save_artifacts: true                   # save build info to .claude/logs/artifacts/
