@@ -124,14 +124,4 @@ logs/
 
 ---
 
-## Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| Java 17 | Language |
-| Spring Boot 3.2 | Web framework + async execution |
-| Thymeleaf | Server-side HTML templates |
-| Jackson YAML | Parse jobs.yml |
-| Bootstrap 5 | Dashboard UI |
-| Bootstrap Icons | Icon set |
-| JetBrains Mono | Terminal font in log viewer |
