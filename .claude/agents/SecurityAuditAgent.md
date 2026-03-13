@@ -1,3 +1,16 @@
+---
+name: SecurityAuditAgent
+description: Performs static security audit scanning for secrets, CVEs, and vulnerabilities
+type: agent
+policies:
+  - .claude/security/secret-detection.md
+  - .claude/security/dependency-scan.md
+  - .claude/security/docker-scan.md
+triggers:
+  - /security-audit
+auto_approve: true
+---
+
 # SecurityAuditAgent
 
 ## Purpose

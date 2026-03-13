@@ -1,4 +1,10 @@
 #!/bin/bash
+# name: pre-commit
+# description: Git pre-commit hook that scans staged files for secrets and sensitive credentials
+# type: hook
+# trigger: pre-commit
+# auto_approve: true
+# install: cp .claude/hooks/pre-commit.md .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 # LightCI Server — Git Pre-Commit Security Hook
 #
 # PURPOSE: Prevents accidental commit of sensitive files and credentials.

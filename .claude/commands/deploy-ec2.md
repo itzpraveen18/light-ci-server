@@ -1,3 +1,12 @@
+---
+name: deploy-ec2
+description: Deploy the Docker container to the EC2 instance
+type: command
+agent: DeploymentAgent
+auto_approve: true
+config_source: .claude/config.yml
+---
+
 Deploy the Docker container to the EC2 instance.
 
 Steps:

@@ -1,3 +1,12 @@
+---
+name: build
+description: Generate a complete Maven build script for LightCI Server via JavaBuildAgent
+type: command
+agent: JavaBuildAgent
+auto_approve: true
+config_source: .claude/config.yml
+---
+
 # Command: /build
 
 ## Description

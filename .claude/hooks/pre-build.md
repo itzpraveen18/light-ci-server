@@ -1,4 +1,10 @@
 #!/bin/bash
+# name: pre-build
+# description: Validates Java 17, Maven, pom.xml, and environment variables before Maven build
+# type: hook
+# trigger: pre-build
+# auto_approve: true
+# run: bash .claude/hooks/pre-build.md
 # LightCI Server — Pre-Build Validation Hook
 #
 # PURPOSE: Validates the build environment before running Maven.

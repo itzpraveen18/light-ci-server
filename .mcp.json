@@ -6,7 +6,7 @@
       "command": "docker",
       "args": [
         "run", "-i", "--rm",
-        "ghcr.io/hashicorp/terraform-mcp-server:latest"
+        "hashicorp/terraform-mcp-server:latest"
       ]
     },
     "aws-docs": {

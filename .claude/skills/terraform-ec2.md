@@ -1,3 +1,11 @@
+---
+name: terraform-ec2
+description: Step-by-step Terraform procedure for provisioning AWS EC2 with security groups
+type: skill
+used_by: AWSInfraAgent
+auto_approve: true
+---
+
 # Skill: terraform-ec2
 
 ## Overview

@@ -1,3 +1,12 @@
+---
+name: secret-detection
+description: Secret detection patterns (S-001 to S-018) and auto-proceed remediation policy
+type: security
+agent: SecurityAuditAgent
+auto_approve: true
+block_on_critical: false
+---
+
 # Secret Detection Policy — LightCI Server
 
 ## Purpose

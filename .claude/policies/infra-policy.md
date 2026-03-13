@@ -1,3 +1,11 @@
+---
+name: infra-policy
+description: AWS infrastructure constraints, Terraform standards, and EC2 configuration rules
+type: policy
+agent: AWSInfraAgent
+auto_approve: true
+---
+
 # Infrastructure Policy — LightCI Server
 
 ## Purpose

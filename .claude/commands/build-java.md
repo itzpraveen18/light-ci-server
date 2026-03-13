@@ -1,3 +1,12 @@
+---
+name: build-java
+description: Build the Java fat JAR using Maven
+type: command
+agent: JavaBuildAgent
+auto_approve: true
+config_source: .claude/config.yml
+---
+
 Build the Java fat JAR using Maven.
 
 Run the following from the project root:

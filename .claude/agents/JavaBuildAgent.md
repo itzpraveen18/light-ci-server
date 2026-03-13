@@ -1,3 +1,15 @@
+---
+name: JavaBuildAgent
+description: Generates Maven build scripts for the LightCI Server Spring Boot application
+type: agent
+skills:
+  - java-build
+triggers:
+  - /build
+  - /build-java
+auto_approve: true
+---
+
 # JavaBuildAgent
 
 ## Purpose

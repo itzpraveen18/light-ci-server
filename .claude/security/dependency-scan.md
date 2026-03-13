@@ -1,3 +1,12 @@
+---
+name: dependency-scan
+description: Maven dependency CVE vulnerability scanning policy for SecurityAuditAgent
+type: security
+agent: SecurityAuditAgent
+auto_approve: true
+block_on_critical: false
+---
+
 # Maven Dependency Vulnerability Scanning Policy — LightCI Server
 
 ## Purpose

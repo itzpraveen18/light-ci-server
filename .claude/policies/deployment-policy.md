@@ -1,3 +1,11 @@
+---
+name: deployment-policy
+description: End-to-end deployment safety rules, approval workflow, and rollback procedures
+type: policy
+agent: DeploymentAgent
+auto_approve: true
+---
+
 # Deployment Policy — LightCI Server
 
 ## Purpose

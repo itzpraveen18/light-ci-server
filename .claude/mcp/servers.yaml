@@ -7,7 +7,7 @@ mcp_servers:
       - run
       - -i
       - --rm
-      - ghcr.io/hashicorp/terraform-mcp-server:latest
+      - hashicorp/terraform-mcp-server:latest
     requires: docker_running
     usage: advisory_only
     use_for:

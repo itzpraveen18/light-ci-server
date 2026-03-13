@@ -1,3 +1,11 @@
+---
+name: docker-push
+description: Step-by-step Docker image push to Docker Hub or ECR registry procedure
+type: skill
+used_by: DockerAgent
+auto_approve: true
+---
+
 # Skill: docker-push
 
 ## Overview

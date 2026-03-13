@@ -1,3 +1,12 @@
+---
+name: build-docker
+description: Build and tag the Docker image for LightCI Server
+type: command
+agent: DockerAgent
+auto_approve: true
+config_source: .claude/config.yml
+---
+
 Build and tag the Docker image for LightCI Server.
 
 Steps:

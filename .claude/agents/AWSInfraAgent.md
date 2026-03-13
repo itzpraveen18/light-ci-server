@@ -1,3 +1,15 @@
+---
+name: AWSInfraAgent
+description: Generates Terraform HCL files for AWS EC2 infrastructure provisioning
+type: agent
+skills:
+  - terraform-ec2
+triggers:
+  - /infra-plan
+  - /provision-ec2
+auto_approve: true
+---
+
 # AWSInfraAgent
 
 ## Purpose

@@ -1,3 +1,17 @@
+---
+name: DockerAgent
+description: Generates Docker build, tag, and push scripts for LightCI Server container images
+type: agent
+skills:
+  - docker-build
+  - docker-push
+triggers:
+  - /docker-build
+  - /build-docker
+  - /push-docker
+auto_approve: true
+---
+
 # DockerAgent
 
 ## Purpose

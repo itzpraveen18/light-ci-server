@@ -1,3 +1,12 @@
+---
+name: docker-build
+description: Generate Docker build, tag, and push script for LightCI Server via DockerAgent
+type: command
+agent: DockerAgent
+auto_approve: true
+config_source: .claude/config.yml
+---
+
 # Command: /docker-build
 
 ## Description

@@ -1,3 +1,12 @@
+---
+name: deploy
+description: Generate SSH-based EC2 deployment script for LightCI Server via DeploymentAgent
+type: command
+agent: DeploymentAgent
+auto_approve: true
+config_source: .claude/config.yml
+---
+
 # Command: /deploy
 
 ## Description

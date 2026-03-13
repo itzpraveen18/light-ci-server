@@ -1,3 +1,11 @@
+---
+name: java-build
+description: Step-by-step Maven build procedure for Spring Boot fat JAR packaging
+type: skill
+used_by: JavaBuildAgent
+auto_approve: true
+---
+
 # Skill: java-build
 
 ## Overview

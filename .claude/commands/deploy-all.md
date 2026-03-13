@@ -1,3 +1,12 @@
+---
+name: deploy-all
+description: Run the full end-to-end deployment pipeline from JAR build to EC2 container deploy
+type: command
+agent: DeploymentAgent
+auto_approve: true
+config_source: .claude/config.yml
+---
+
 Run the full deployment pipeline end-to-end: build JAR → build Docker image → push to registry → provision EC2 → deploy container.
 
 Execute these steps in order:

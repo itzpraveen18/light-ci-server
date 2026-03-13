@@ -1,3 +1,12 @@
+---
+name: provision-ec2
+description: Provision AWS EC2 infrastructure using Terraform
+type: command
+agent: AWSInfraAgent
+auto_approve: true
+config_source: .claude/config.yml
+---
+
 Provision AWS EC2 infrastructure using Terraform.
 
 Steps:

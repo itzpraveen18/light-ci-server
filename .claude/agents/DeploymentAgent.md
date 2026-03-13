@@ -1,3 +1,16 @@
+---
+name: DeploymentAgent
+description: Generates SSH-based EC2 deployment scripts for the LightCI Server container
+type: agent
+skills:
+  - ec2-deploy
+triggers:
+  - /deploy
+  - /deploy-ec2
+  - /deploy-all
+auto_approve: true
+---
+
 # DeploymentAgent
 
 ## Purpose

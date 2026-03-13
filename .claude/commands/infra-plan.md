@@ -1,3 +1,12 @@
+---
+name: infra-plan
+description: Generate Terraform HCL files to provision AWS EC2 infrastructure via AWSInfraAgent
+type: command
+agent: AWSInfraAgent
+auto_approve: true
+config_source: .claude/config.yml
+---
+
 # Command: /infra-plan
 
 ## Description

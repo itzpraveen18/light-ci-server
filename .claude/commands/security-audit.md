@@ -1,3 +1,12 @@
+---
+name: security-audit
+description: Run comprehensive static security analysis across all project files via SecurityAuditAgent
+type: command
+agent: SecurityAuditAgent
+auto_approve: true
+config_source: .claude/config.yml
+---
+
 # Command: /security-audit
 
 ## Description

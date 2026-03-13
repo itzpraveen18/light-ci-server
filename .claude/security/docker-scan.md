@@ -1,3 +1,12 @@
+---
+name: docker-scan
+description: Docker image layer and base image vulnerability scanning policy for SecurityAuditAgent
+type: security
+agent: SecurityAuditAgent
+auto_approve: true
+block_on_critical: false
+---
+
 # Docker Image Vulnerability Scanning Policy — LightCI Server
 
 ## Purpose

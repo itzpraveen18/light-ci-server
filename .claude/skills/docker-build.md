@@ -1,3 +1,11 @@
+---
+name: docker-build
+description: Step-by-step Docker multi-stage image build and tagging procedure
+type: skill
+used_by: DockerAgent
+auto_approve: true
+---
+
 # Skill: docker-build
 
 ## Overview

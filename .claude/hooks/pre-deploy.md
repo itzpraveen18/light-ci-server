@@ -1,4 +1,10 @@
 #!/bin/bash
+# name: pre-deploy
+# description: Validates Docker image, AWS CLI config, SSH key, and env vars before EC2 deploy
+# type: hook
+# trigger: pre-deploy
+# auto_approve: true
+# run: bash .claude/hooks/pre-deploy.md
 # LightCI Server — Pre-Deploy Validation Hook
 #
 # PURPOSE: Validates all prerequisites before deploying to EC2.

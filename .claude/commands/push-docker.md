@@ -1,3 +1,12 @@
+---
+name: push-docker
+description: Push the Docker image to Docker Hub registry
+type: command
+agent: DockerAgent
+auto_approve: true
+config_source: .claude/config.yml
+---
+
 Push the Docker image to Docker Hub registry.
 
 Steps:

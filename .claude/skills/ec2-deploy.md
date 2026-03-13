@@ -1,3 +1,11 @@
+---
+name: ec2-deploy
+description: Step-by-step SSH-based EC2 Docker container deployment procedure
+type: skill
+used_by: DeploymentAgent
+auto_approve: true
+---
+
 # Skill: ec2-deploy
 
 ## Overview

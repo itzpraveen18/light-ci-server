@@ -1,4 +1,10 @@
 #!/bin/bash
+# name: post-deploy
+# description: Validates application health and HTTP 200 response on EC2 after deployment
+# type: hook
+# trigger: post-deploy
+# auto_approve: true
+# run: bash .claude/hooks/post-deploy.md
 # LightCI Server — Post-Deploy Validation Hook
 #
 # PURPOSE: Validates that the application is running on EC2 after deployment.
