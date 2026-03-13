@@ -1,4 +1,5 @@
 {
+  "_note": "Canonical MCP server configuration reference is now at .claude/mcp/servers.yaml — this file remains authoritative for the Claude CLI but servers.yaml is the human-readable source of truth.",
   "mcpServers": {
     "terraform": {
       "type": "stdio",

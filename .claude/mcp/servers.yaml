@@ -1,0 +1,52 @@
+mcp_servers:
+
+  terraform:
+    description: Terraform registry docs, provider schemas, module lookup
+    command: docker
+    args:
+      - run
+      - -i
+      - --rm
+      - ghcr.io/hashicorp/terraform-mcp-server:latest
+    requires: docker_running
+    usage: advisory_only
+    use_for:
+      - Looking up aws_instance resource arguments
+      - Checking provider version compatibility
+      - Finding module registry examples
+
+  aws-docs:
+    description: Official AWS documentation search
+    command: uvx
+    args:
+      - awslabs.aws-documentation-mcp-server@latest
+    env:
+      FASTMCP_LOG_LEVEL: ERROR
+    usage: advisory_only
+    use_for:
+      - EC2 instance type specifications
+      - IAM policy syntax
+      - ECR authentication steps
+      - Security group rule formats
+
+  aws-core:
+    description: AWS service guidance and best practices
+    command: uvx
+    args:
+      - awslabs.core-mcp-server@latest
+    env:
+      FASTMCP_LOG_LEVEL: ERROR
+    usage: advisory_only
+    use_for:
+      - AWS SDK usage patterns
+      - Service limits and quotas
+      - Region availability
+      - Cost estimation guidance
+
+policy:
+  execution: never          # Claude never executes via MCP
+  mutations: forbidden      # Claude never mutates infrastructure via MCP
+  purpose: read_and_advise  # MCP is for knowledge lookup only
+
+verify:
+  command: claude mcp list
