@@ -1,0 +1,38 @@
+# ── Terraform ─────────────────────────────────────────────────────────────────
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/*.tfvars
+terraform/terraform.tfstate.*.backup
+
+# ── Build artifacts ───────────────────────────────────────────────────────────
+target/
+*.jar
+*.war
+
+# ── Local Claude settings (may contain live IPs, keys) ───────────────────────
+.claude/settings.local.json
+
+# ── Runtime logs ─────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── SSH keys / certificates ───────────────────────────────────────────────────
+*.pem
+*.key
+*.p12
+*.jks
+
+# ── Environment files ─────────────────────────────────────────────────────────
+.env
+.env.local
+.env.*
+
+# ── IDE / OS ──────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

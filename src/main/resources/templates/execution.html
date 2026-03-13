@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="'LightCI — ' + ${execution.jobName}">LightCI — Execution</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --ci-dark:    #0f1117;
+      --ci-surface: #1a1d27;
+      --ci-card:    #21252f;
+      --ci-border:  #2d3143;
+      --ci-accent:  #4f8ef7;
+      --ci-green:   #22c55e;
+      --ci-red:     #ef4444;
+      --ci-yellow:  #f59e0b;
+      --ci-text:    #e2e8f0;
+      --ci-muted:   #8892a4;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      background: var(--ci-dark);
+      color: var(--ci-text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── NAVBAR ── */
+    .ci-navbar {
+      background: var(--ci-surface);
+      border-bottom: 1px solid var(--ci-border);
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ci-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700; font-size: 1.15rem;
+      color: var(--ci-text); text-decoration: none;
+    }
+    .ci-logo .logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, #4f8ef7, #a78bfa);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .btn-back {
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--ci-border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      color: var(--ci-muted);
+      font-size: .82rem;
+      text-decoration: none;
+      display: flex; align-items: center; gap: 6px;
+      transition: background .2s, color .2s;
+    }
+    .btn-back:hover { background: rgba(255,255,255,.1); color: var(--ci-text); }
+
+    /* ── LAYOUT ── */
+    .main-content { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+    /* ── META HEADER ── */
+    .exec-meta {
+      background: var(--ci-card);
+      border: 1px solid var(--ci-border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .exec-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .exec-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .exec-pill {
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--ci-border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: .8rem;
+      color: var(--ci-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .exec-pill strong { color: var(--ci-text); }
+
+    /* Status badges */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 12px; border-radius: 50px;
+      font-size: .82rem; font-weight: 600;
+    }
+    .status-SUCCESS { background: rgba(34,197,94,.15);  color: #86efac; }
+    .status-FAILED  { background: rgba(239,68,68,.15);  color: #fca5a5; }
+    .status-RUNNING { background: rgba(245,158,11,.15); color: #fcd34d; }
+    .status-PENDING { background: rgba(148,163,184,.12); color: #94a3b8; }
+    .spin { animation: spin .8s linear infinite; display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── LOG VIEWER ── */
+    .log-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .log-title {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ci-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .log-wrap {
+      background: #0a0c10;
+      border: 1px solid var(--ci-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .log-topbar {
+      background: rgba(255,255,255,.03);
+      border-bottom: 1px solid var(--ci-border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-red    { background: #ff5f57; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green  { background: #28c940; }
+    .log-file-path {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      color: var(--ci-muted);
+      margin-left: 8px;
+    }
+    .log-body {
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .82rem;
+      line-height: 1.8;
+      color: #c9d1d9;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    /* Log line colorisation */
+    .log-body .cmd-line  { color: #79c0ff; }   /* lines starting with $ */
+    .log-body .ok-line   { color: #56d364; }   /* BUILD SUCCESS */
+    .log-body .fail-line { color: #ff7b72; }   /* BUILD FAILED / FAILED */
+    .log-body .sep-line  { color: #484f58; }   /* === dividers */
+
+    /* ── RUNNING INDICATOR ── */
+    .running-bar {
+      background: rgba(245,158,11,.08);
+      border: 1px solid rgba(245,158,11,.25);
+      border-radius: 8px;
+      padding: 10px 16px;
+      color: #fcd34d;
+      font-size: .83rem;
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    /* ── COPY BUTTON ── */
+    .btn-copy {
+      background: rgba(79,142,247,.1);
+      border: 1px solid rgba(79,142,247,.2);
+      color: var(--ci-accent);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: .78rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-copy:hover { background: rgba(79,142,247,.2); }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="ci-navbar">
+  <a class="ci-logo" href="/">
+    <div class="logo-icon">⚡</div>
+    LightCI
+  </a>
+  <a href="/" class="btn-back">
+    <i class="bi bi-arrow-left"></i> Back to Dashboard
+  </a>
+</nav>
+
+<!-- ── MAIN ── -->
+<div class="main-content">
+
+  <!-- Running indicator with auto-refresh -->
+  <div th:if="${execution.running}" class="running-bar">
+    <span class="spin"><i class="bi bi-arrow-repeat"></i></span>
+    Job is currently running — auto-refreshing every 2 seconds...
+  </div>
+
+  <!-- ── EXECUTION META ── -->
+  <div class="exec-meta">
+    <div class="exec-title">
+      <i class="bi bi-terminal-fill" style="color:var(--ci-accent)"></i>
+      <span th:text="${execution.jobName}">Job Name</span>
+      <span th:class="'status-badge status-' + ${execution.status}">
+        <span th:if="${execution.running}" class="spin"><i class="bi bi-arrow-repeat"></i></span>
+        <i th:if="${!execution.running}" th:class="'bi ' + ${execution.status.icon()}"></i>
+        <span th:text="${execution.status}">STATUS</span>
+      </span>
+    </div>
+
+    <div class="exec-pills">
+      <div class="exec-pill">
+        <i class="bi bi-hash"></i>
+        Execution ID: <strong th:text="${#strings.substring(execution.id,0,8) + '...'}">id</strong>
+      </div>
+      <div class="exec-pill">
+        <i class="bi bi-play-circle"></i>
+        Started: <strong th:text="${execution.formattedStartTime}">-</strong>
+      </div>
+      <div class="exec-pill">
+        <i class="bi bi-stopwatch"></i>
+        Duration: <strong th:text="${execution.duration}">-</strong>
+      </div>
+      <div class="exec-pill">
+        <i class="bi bi-briefcase"></i>
+        Job ID: <strong th:text="${execution.jobId}">-</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LOG VIEWER ── -->
+  <div class="log-header">
+    <div class="log-title"><i class="bi bi-file-text"></i> Console Output</div>
+    <button class="btn-copy" onclick="copyLogs()"><i class="bi bi-clipboard me-1"></i>Copy Logs</button>
+  </div>
+
+  <div class="log-wrap">
+    <div class="log-topbar">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+      <span class="log-file-path" th:text="${execution.logFile}">logs/exec.log</span>
+    </div>
+    <div class="log-body" id="logContent" th:if="${execution.logs != null}" th:utext="${@logFormatter.format(execution.logs)}">
+    </div>
+    <div class="log-body" th:if="${execution.logs == null}" style="color:var(--ci-muted)">
+      Waiting for output...
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+  // Scroll log to bottom on load
+  const logEl = document.getElementById('logContent');
+  if (logEl) logEl.scrollTop = logEl.scrollHeight;
+
+  // Auto-refresh while running
+  const isRunning = [[${execution.running}]];
+  if (isRunning) {
+    setTimeout(() => location.reload(), 2000);
+  }
+
+  // Copy logs to clipboard
+  function copyLogs() {
+    const text = logEl ? logEl.innerText : '';
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.btn-copy');
+      btn.innerHTML = '<i class="bi bi-check me-1"></i>Copied!';
+      setTimeout(() => btn.innerHTML = '<i class="bi bi-clipboard me-1"></i>Copy Logs', 2000);
+    });
+  }
+</script>
+
+</body>
+</html>

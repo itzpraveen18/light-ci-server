@@ -1,0 +1,63 @@
+jobs:
+
+  # ── Job 1: Hello World ────────────────────────────────────────────────────
+  - id: hello-world
+    name: Hello World
+    description: Simple echo test — great for verifying LightCI is working
+    commands:
+      - echo "============================================"
+      - echo "  LightCI — Hello World Job"
+      - echo "============================================"
+      - echo "Step 1 — Greeting..."
+      - echo "Hello from LightCI!"
+      - echo "Step 2 — Done!"
+
+  # ── Job 2: System Info ────────────────────────────────────────────────────
+  - id: system-info
+    name: System Info
+    description: Prints OS details, Java version, and environment info
+    commands:
+      - echo "=== OS Information ==="
+      - uname -a
+      - echo ""
+      - echo "=== Java Version ==="
+      - java -version
+      - echo ""
+      - echo "=== Current User & Directory ==="
+      - whoami
+      - pwd
+      - echo ""
+      - echo "=== Disk Usage ==="
+      - df -h /
+
+  # ── Job 3: File Operations ────────────────────────────────────────────────
+  - id: file-ops
+    name: File Operations
+    description: Creates a temp file, writes to it, reads it back, then deletes it
+    commands:
+      - echo "Creating temp file..."
+      - echo "LightCI build artifact" > /tmp/lightci-test.txt
+      - echo "File created. Contents:"
+      - cat /tmp/lightci-test.txt
+      - echo "Cleaning up..."
+      - rm /tmp/lightci-test.txt
+      - echo "Temp file deleted. Done!"
+
+  # ── Job 4: Maven Build (runs on this project itself) ──────────────────────
+  - id: maven-build
+    name: Maven Build (Self)
+    description: Compiles this LightCI project using Maven
+    commands:
+      - echo "Starting Maven build..."
+      - mvn compile -f pom.xml -q
+      - echo "Maven build completed successfully!"
+
+  # ── Job 5: Failing Job (for demo purposes) ────────────────────────────────
+  - id: failing-job
+    name: Failing Job (Demo)
+    description: Intentionally fails — shows how FAILED status looks in the dashboard
+    commands:
+      - echo "This step will succeed..."
+      - echo "Now running a command that will fail..."
+      - exit 1
+      - echo "This line should NOT appear"

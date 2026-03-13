@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: LightCI Server
+  thymeleaf:
+    cache: false          # disable template cache for development hot-reload
+    suffix: .html
+    prefix: classpath:/templates/
+
+# LightCI specific configuration
+lightci:
+  logs-dir: logs          # directory where per-execution .log files are written
+
+logging:
+  level:
+    com.example.lightci: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
