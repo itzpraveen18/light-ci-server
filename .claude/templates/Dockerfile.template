@@ -1,0 +1,117 @@
+# LightCI Server — Parameterised Dockerfile Template
+# =====================================================
+# This template is used by DockerAgent to generate a production
+# Dockerfile for the LightCI Server Spring Boot application.
+#
+# Build arguments (all have defaults for the LightCI project):
+#   BASE_IMAGE   — JDK image for builder stage (default: eclipse-temurin:17-jdk-alpine)
+#   RUNTIME_IMAGE— JRE image for runtime stage (default: eclipse-temurin:17-jre-alpine)
+#   JAR_FILE     — Path to the fat JAR relative to build context
+#   APP_PORT     — Application listen port (default: 8080)
+#   APP_USER     — Non-root username inside the container (default: appuser)
+#   APP_GROUP    — Non-root group name inside the container (default: appgroup)
+#
+# USAGE (with defaults):
+#   docker build -t light-ci-server:latest .
+#
+# USAGE (with custom args):
+#   docker build \
+#     --build-arg JAR_FILE=target/light-ci-server.jar \
+#     --build-arg APP_PORT=9090 \
+#     -t light-ci-server:1.0.0 .
+
+# ─── Build Arguments ──────────────────────────────────────────────────────────
+
+ARG BASE_IMAGE=eclipse-temurin:17-jdk-alpine
+ARG RUNTIME_IMAGE=eclipse-temurin:17-jre-alpine
+ARG JAR_FILE=target/light-ci-server.jar
+ARG APP_PORT=8080
+ARG APP_USER=appuser
+ARG APP_GROUP=appgroup
+
+# ─── Stage 1: Builder ─────────────────────────────────────────────────────────
+# This stage is discarded after build — only the JAR is carried forward.
+# Having a builder stage means build tools (maven, JDK) never appear in the
+# final image.
+
+FROM ${BASE_IMAGE} AS builder
+
+WORKDIR /build
+
+# If using Maven inside Docker (alternative: pre-build on host, copy JAR):
+# COPY pom.xml .
+# COPY src ./src
+# RUN apk add --no-cache maven && \
+#     mvn dependency:go-offline -q && \
+#     mvn clean package -DskipTests -q
+
+# Preferred: copy pre-built JAR from Maven host build (faster CI, smaller layer)
+ARG JAR_FILE
+COPY ${JAR_FILE} application.jar
+
+# Extract Spring Boot layered JAR for optimised Docker layers
+# Requires Spring Boot 2.3+ with <layers> enabled in pom.xml
+RUN java -Djarmode=layertools -jar application.jar extract --destination extracted
+
+# ─── Stage 2: Runtime ─────────────────────────────────────────────────────────
+# Minimal JRE-only image. No build tools, no source code, no JDK.
+
+FROM ${RUNTIME_IMAGE} AS runtime
+
+ARG APP_PORT
+ARG APP_USER
+ARG APP_GROUP
+
+WORKDIR /app
+
+# Create non-root user and group
+RUN addgroup -S ${APP_GROUP} && \
+    adduser -S ${APP_USER} -G ${APP_GROUP} && \
+    mkdir -p /app/logs && \
+    chown -R ${APP_USER}:${APP_GROUP} /app
+
+# Copy layered JAR contents (in dependency order for optimal layer caching)
+# Most-stable layers first → least-stable last
+COPY --from=builder --chown=${APP_USER}:${APP_GROUP} /build/extracted/dependencies          ./
+COPY --from=builder --chown=${APP_USER}:${APP_GROUP} /build/extracted/spring-boot-loader    ./
+COPY --from=builder --chown=${APP_USER}:${APP_GROUP} /build/extracted/snapshot-dependencies ./
+COPY --from=builder --chown=${APP_USER}:${APP_GROUP} /build/extracted/application           ./
+
+# Run as non-root
+USER ${APP_USER}
+
+# Expose application port
+EXPOSE ${APP_PORT}
+
+# JVM tuning for containers:
+#   UseContainerSupport      — Honour cgroup memory limits (enabled by default in Java 11+)
+#   MaxRAMPercentage         — Use 75% of container memory for heap
+#   TieredStopAtLevel=1      — Faster startup (trade: slower peak throughput)
+#   security.egd             — Faster SecureRandom on Linux (avoid /dev/random blocking)
+ENV JAVA_OPTS="\
+  -XX:+UseContainerSupport \
+  -XX:MaxRAMPercentage=75.0 \
+  -XX:InitialRAMPercentage=50.0 \
+  -Djava.security.egd=file:/dev/./urandom \
+  -Dspring.profiles.active=prod \
+  -Dserver.port=${APP_PORT}"
+
+# Health check — uses wget (smaller than curl on Alpine)
+# --start-period: gives the app time to boot before health checks begin
+HEALTHCHECK \
+  --interval=30s \
+  --timeout=10s \
+  --start-period=60s \
+  --retries=3 \
+  CMD wget -qO- http://localhost:${APP_PORT}/actuator/health | grep -q '"status":"UP"' || exit 1
+
+# Entrypoint uses Spring Boot's layered JAR launcher
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} org.springframework.boot.loader.JarLauncher"]
+
+# ─── Image Labels (OCI standard) ──────────────────────────────────────────────
+LABEL org.opencontainers.image.title="LightCI Server"
+LABEL org.opencontainers.image.description="Lightweight Jenkins-like CI dashboard (Spring Boot 3.2)"
+LABEL org.opencontainers.image.version="1.0.0"
+LABEL org.opencontainers.image.vendor="com.example"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.source="https://github.com/example/light-ci-server"

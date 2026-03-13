@@ -36,3 +36,14 @@ logs/
 *.swo
 .DS_Store
 Thumbs.db
+
+# ── Claude generated logs (plans, audits, artifacts, sessions) ────────────────
+.claude/logs/plans/
+.claude/logs/audits/
+.claude/logs/artifacts/
+.claude/logs/sessions/
+
+# ── Claude environment variable files (real values, not examples) ─────────────
+# Keep *.env.example committed; ignore all *.env files with real values
+.claude/env/*.env
+!.claude/env/*.env.example
